@@ -1,0 +1,29 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "Solid.h"
+#include "SolidSphere.generated.h"
+
+/**
+ * 
+ */
+UCLASS()
+class PRACTICA1FISICAGLA_API ASolidSphere : public ASolid
+{
+	GENERATED_BODY()
+public:
+	ASolidSphere();
+	UPROPERTY(EditAnywhere)
+	float fRadio;
+	UPROPERTY(EditAnywhere)
+	class USphereComponent* sphereMesh;
+	
+	float GetRadio() const;
+	void SetRadio(float NewRadio);
+
+	virtual void Tick(float DeltaTime) override;
+protected:
+	virtual void BeginPlay() override;
+};

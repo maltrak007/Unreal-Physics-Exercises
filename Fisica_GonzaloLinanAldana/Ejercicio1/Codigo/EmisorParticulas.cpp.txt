@@ -1,0 +1,51 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+#include "EmisorParticulas.h"
+
+AEmisorParticulas::AEmisorParticulas()
+{
+	PrimaryActorTick.bCanEverTick = true;
+	fRatioEmision = 2.0f;
+	ParticleLifetime = 4.0f;
+    fvInitialVelocity = FVector(100.0f, 0.0f, 0.0f); 
+    fvInitialAcceleration = FVector(0.0f, 0.0f, 0.0f);
+}
+
+// Called when the game starts or when spawned
+void AEmisorParticulas::BeginPlay()
+{
+	Super::BeginPlay();
+	fvSpawnLocation = GetActorLocation();
+}
+
+
+void AEmisorParticulas::Tick(float TimeStep)
+{
+	Super::Tick(TimeStep);
+
+    fRatioEmision += TimeStep;
+
+    // Comprueba si es momento de emitir una nueva partícula
+    if (fRatioEmision >= 1.0f / fRatioEmision)
+    {
+        // Ajusta la posición de spawn con la posición del emisor
+        FVector SpawnPosition = GetActorLocation() + FVector(20,0,0);
+
+        // Genera la nueva partícula en la posición del emisor
+        AParticle* NewParticle = GetWorld()->SpawnActor<AParticle>(particle, SpawnPosition, FRotator::ZeroRotator);
+        if (NewParticle)
+        {
+            NewParticle->SetVelocity(fvInitialVelocity);
+            NewParticle->SetAcceleration(fvInitialAcceleration);
+            NewParticle->SetLifetime(ParticleLifetime);
+            NewParticle->SetPosition(SpawnPosition);
+            ptr_Particles.Add(NewParticle);
+        }
+
+        // Reinicia el contador de emisión
+        fRatioEmision = 0.0f;
+    }
+}
+
+
+
+

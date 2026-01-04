@@ -1,0 +1,40 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+
+#include "SolidSphere.h"
+#include "Components/SphereComponent.h"
+#include "DrawDebugHelpers.h"
+
+ASolidSphere::ASolidSphere()
+{
+	sphereMesh = CreateDefaultSubobject<USphereComponent>("Malla Esfera");
+	RootComponent = sphereMesh;
+	sphereMesh->SetSphereRadius(fRadio);
+	fRadio = 100.0f;
+}
+
+void ASolidSphere::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
+
+
+void ASolidSphere::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+}
+
+float ASolidSphere::GetRadio() const
+{
+	return fRadio;
+}
+
+void ASolidSphere::SetRadio(float NewRadio)
+{
+	fRadio = NewRadio;
+	if (sphereMesh)
+	{
+		sphereMesh->SetSphereRadius(fRadio);
+	}
+}

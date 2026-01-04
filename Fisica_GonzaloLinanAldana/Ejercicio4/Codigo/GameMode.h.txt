@@ -1,0 +1,25 @@
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "GameFramework/GameModeBase.h"
+#include "SolidSphere.h"
+#include "Practica1FisicaGLAGameMode.generated.h"
+
+UCLASS(minimalapi)
+class APractica1FisicaGLAGameMode : public AGameModeBase
+{
+	GENERATED_BODY()
+
+public:
+	APractica1FisicaGLAGameMode();
+
+	void CheckSphereCollisions(const TArray<ASolidSphere*>& SolidSpheres);
+
+protected:
+	// Llamada cuando el juego comienza o cuando se spawnea
+	virtual void BeginPlay() override;
+};
+
+
+

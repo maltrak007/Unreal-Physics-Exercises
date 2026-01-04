@@ -1,0 +1,35 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+#include "Pelota.h"
+#include "CoreMinimal.h"
+#include "Engine/TriggerVolume.h"
+#include "RepelBallVolume.generated.h"
+
+/**
+ * 
+ */
+UCLASS()
+class PRACTICA1FISICAGLA_API ARepelBallVolume : public ATriggerVolume
+{
+	GENERATED_BODY()
+public:
+	ARepelBallVolume();
+
+protected:
+    virtual void BeginPlay() override;
+
+    UFUNCTION()
+    void OnOverlapBegin(class AActor* OverlappedActor, class AActor* OtherActor);
+
+    UFUNCTION()
+    void OnOverlapEnd(class AActor* OverlappedActor, class AActor* OtherActor);
+
+    void ApplyImpulseToBall(APelota* Pelota);
+
+    UPROPERTY(EditDefaultsOnly, Category = "Impulse")
+    float ImpulseMagnitude;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Impulse")
+    FVector ImpulseDirection;
+};

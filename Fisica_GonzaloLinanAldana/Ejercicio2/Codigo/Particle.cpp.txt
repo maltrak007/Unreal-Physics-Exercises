@@ -1,0 +1,92 @@
+#include "Particle.h"
+
+// Sets default values
+AParticle::AParticle()
+{
+ 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	PrimaryActorTick.bCanEverTick = true;
+	//Inicializamos los valores iniciales de las particulas en el constructor 
+	fPosicion = FVector(140,140,0);
+	fVelocidad = FVector(100,100,0);
+	fAceleracion = FVector(0,150,0);
+	fTiempoVida = 4.0f;
+	fMasa = 1.0f;
+}
+
+void AParticle::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	//Realizamos los calculos de velocidad para determinar la posicion de la particula
+	fVelocidad += fAceleracion * DeltaTime;
+	fPosicion += fVelocidad * DeltaTime;
+	SetActorLocation(fPosicion);
+
+	if(fTiempoVida <= 0.0f)
+	{
+		Destroy();
+	}
+	else
+	{
+		fTiempoVida -= DeltaTime;
+	}
+}
+
+// Called when the game starts or when spawned
+void AParticle::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
+//Perdon por mezclar ingles y español pero yo me entiendo asi mejor en Spanglish
+FVector AParticle::GetPosition() const
+{
+	return fPosicion;
+}
+
+void AParticle::SetPosition(const FVector& NewPosition)
+{
+	fPosicion = NewPosition;
+}
+
+FVector AParticle::GetVelocity() const
+{
+	return fVelocidad;
+}
+
+void AParticle::SetVelocity(const FVector& NewVelocity)
+{
+	fVelocidad = NewVelocity;
+}
+
+FVector AParticle::GetAcceleration() const
+{
+	return fAceleracion;
+}
+
+void AParticle::SetAcceleration(const FVector& NewAcceleration)
+{
+	fAceleracion = NewAcceleration;
+}
+
+float AParticle::GetLifetime() const
+{
+	return fTiempoVida;
+}
+
+void AParticle::SetLifetime(float NewLifetime)
+{
+	fTiempoVida = NewLifetime;
+}
+
+float AParticle::GetMasa() const
+{
+	return fMasa;
+}
+
+void AParticle::SetMasa(float NewMass)
+{
+	fMasa = NewMass;
+}
+
+

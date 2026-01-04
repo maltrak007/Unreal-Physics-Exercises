@@ -1,0 +1,3 @@
+La practica 12 se encuentra en el ordenador de mi compañero, la mécanica la hicimos tres intengrantes David Alamo, Ivan Cervantes y Gonzalo Liñan. 
+La mécanica consistia en que cuando el jugador entrase en un collision box la gravedad se invirtiese para que pudiese caminar por el techo.
+La hicimos entera en blueprints y conseguimos invertir la gravedad sin éxito de que el personaje pudiese caminar por el techo.

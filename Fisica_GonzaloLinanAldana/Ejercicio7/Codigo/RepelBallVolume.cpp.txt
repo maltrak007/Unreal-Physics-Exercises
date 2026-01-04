@@ -1,0 +1,39 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#include "RepelBallVolume.h"
+
+ARepelBallVolume::ARepelBallVolume()
+{
+	ImpulseMagnitude = 10000000.0f;
+	ImpulseDirection = FVector(1.0f, 0.0f, 0.0f);
+}
+
+void ARepelBallVolume::BeginPlay()
+{
+	Super::BeginPlay();
+	OnActorBeginOverlap.AddDynamic(this, &ARepelBallVolume::OnOverlapBegin);
+	OnActorEndOverlap.AddDynamic(this, &ARepelBallVolume::OnOverlapEnd);
+}
+
+void ARepelBallVolume::OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor)
+{
+	APelota* Pelota = Cast<APelota>(OtherActor);
+	if (Pelota)
+	{
+		ApplyImpulseToBall(Pelota);
+	}
+}
+
+void ARepelBallVolume::OnOverlapEnd(AActor* OverlappedActor, AActor* OtherActor)
+{
+	//No hacemos nada
+}
+
+void ARepelBallVolume::ApplyImpulseToBall(APelota* Pelota)
+{
+	if (Pelota)
+	{
+		FVector Impulse = ImpulseDirection * ImpulseMagnitude;
+		Pelota->ballMesh->AddForce(Impulse);
+	}
+}

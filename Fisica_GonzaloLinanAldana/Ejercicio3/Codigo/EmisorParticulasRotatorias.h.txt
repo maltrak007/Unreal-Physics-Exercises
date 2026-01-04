@@ -1,0 +1,29 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+#include "RotatingParticle.h"
+#include "CoreMinimal.h"
+#include "EmisorParticulas.h"
+#include "EmisorParticulasRotatorias.generated.h"
+
+/**
+ * 
+ */
+UCLASS()
+class PRACTICA1FISICAGLA_API AEmisorParticulasRotatorias : public AEmisorParticulas
+{
+	GENERATED_BODY()
+public:
+	AEmisorParticulasRotatorias();
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TSubclassOf<ARotatingParticle>rotatingParticle;
+	TArray<ARotatingParticle*> ptr_RotatingParticles;
+	float fRotationRatioEmision;
+	FVector fvRotationInitialVelocity;
+	FVector fvRotationInitialAcceleration;
+	float rotationParticleLifetime;
+
+	virtual void Tick(float TimeStep) override;
+protected:
+	virtual void BeginPlay() override;
+};

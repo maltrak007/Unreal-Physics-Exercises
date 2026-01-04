@@ -1,0 +1,63 @@
+#include "Practica1FisicaGLAGameMode.h"
+#include "Kismet/GameplayStatics.h"
+#include "SolidSphere.h"
+
+APractica1FisicaGLAGameMode::APractica1FisicaGLAGameMode()
+{
+	// Establece la clase predeterminada del personaje a nuestro personaje Blueprinted
+	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/ThirdPerson/Blueprints/BP_ThirdPersonCharacter"));
+	if (PlayerPawnBPClass.Class != NULL)
+	{
+		DefaultPawnClass = PlayerPawnBPClass.Class;
+	}
+}
+
+void APractica1FisicaGLAGameMode::BeginPlay()
+{
+	Super::BeginPlay();
+
+	// Obtener una lista de todos los sólidos en el nivel
+	TArray<AActor*> SolidActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASolidSphere::StaticClass(), SolidActors);
+
+	// Convertir la lista de actores a una lista de SolidSphere
+	TArray<ASolidSphere*> SolidSpheres;
+	for (AActor* Actor : SolidActors)
+	{
+		ASolidSphere* SolidSphere = Cast<ASolidSphere>(Actor);
+		if (SolidSphere)
+		{
+			SolidSpheres.Add(SolidSphere);
+		}
+	}
+
+	// Verificar las colisiones entre las esferas
+	CheckSphereCollisions(SolidSpheres);
+}
+
+void APractica1FisicaGLAGameMode::CheckSphereCollisions(const TArray<ASolidSphere*>& SolidSpheres)
+{
+	for (int32 i = 0; i < SolidSpheres.Num(); ++i)
+	{
+		for (int32 j = i + 1; j < SolidSpheres.Num(); ++j)
+		{
+			ASolidSphere* Solid1 = SolidSpheres[i];
+			ASolidSphere* Solid2 = SolidSpheres[j];
+
+			// Calcular la distancia entre los centros de las esferas
+			float Distance = FVector::Distance(Solid1->GetActorLocation(), Solid2->GetActorLocation());
+
+			// Calcular la suma de los radios de las esferas
+			float SumRadii = Solid1->GetRadio() + Solid2->GetRadio();
+
+			// Si la distancia entre los centros es menor que la suma de los radios, las esferas están colisionando
+			if (Distance < SumRadii)
+			{
+				// Coloca aquí el código para manejar la colisión, como cambiar el color o hacer debug draw
+				// Por ejemplo, puedes usar GEngine->AddOnScreenDebugMessage para mostrar un mensaje en pantalla
+				// o cambiar el color del material del sólido
+				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Colisión entre %s y %s"), *Solid1->GetName(), *Solid2->GetName()));
+			}
+		}
+	}
+}

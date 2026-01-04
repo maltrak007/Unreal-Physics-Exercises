@@ -1,0 +1,36 @@
+#include "EmisorParticulasRotatorias.h"
+
+AEmisorParticulasRotatorias::AEmisorParticulasRotatorias()
+{
+	PrimaryActorTick.bCanEverTick = true;
+	fRotationRatioEmision = 2.0f;
+	rotationParticleLifetime = 15.0f;
+	fvRotationInitialVelocity = FVector(100.0f, 0.0f, 0.0f);
+	fvRotationInitialAcceleration = FVector(0.0f, 0.0f, 0.0f);
+}
+
+void AEmisorParticulasRotatorias::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
+void AEmisorParticulasRotatorias::Tick(float TimeStep)
+{
+	fRotationRatioEmision += TimeStep;
+
+	if (fRotationRatioEmision >= 1.0f / fRotationRatioEmision)
+	{
+		FVector SpawnPosition = GetActorLocation() + FVector(20, 0, 0);
+
+		ARotatingParticle* newRotatingParticle = GetWorld()->SpawnActor<ARotatingParticle>(particle, SpawnPosition, FRotator::ZeroRotator);
+		if (newRotatingParticle)
+		{
+			newRotatingParticle->SetVelocity(fvRotationInitialVelocity);
+			newRotatingParticle->SetAcceleration(fvRotationInitialAcceleration);
+			newRotatingParticle->SetLifetime(rotationParticleLifetime);
+			newRotatingParticle->SetPosition(SpawnPosition);
+			ptr_RotatingParticles.Add(newRotatingParticle);
+		}
+		fRotationRatioEmision = 0.0f;
+	}
+}

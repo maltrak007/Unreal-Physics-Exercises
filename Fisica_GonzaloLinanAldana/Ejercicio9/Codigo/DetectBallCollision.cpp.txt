@@ -1,0 +1,54 @@
+// CollisionDetector.cpp
+
+#include "DetectBallCollision.h"
+#include "Components/SphereComponent.h"
+
+
+// Sets default values
+ADetectBallCollision::ADetectBallCollision()
+{
+    // Set this actor to call Tick() every frame
+    PrimaryActorTick.bCanEverTick = true;
+
+    // Create and attach the collision component
+    CollisionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("CollisionSphere"));
+    RootComponent = CollisionSphere;
+    CollisionSphere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+    CollisionSphere->SetCollisionObjectType(ECC_WorldDynamic);
+    CollisionSphere->SetGenerateOverlapEvents(true); // Habilitar la generación de eventos de superposición
+    CollisionSphere->SetCollisionResponseToAllChannels(ECR_Overlap);
+    CollisionSphere->SetCollisionResponseToChannel(ECC_PhysicsBody, ECR_Overlap);
+    collision = 0;
+}
+
+// Called when the game starts or when spawned
+void ADetectBallCollision::BeginPlay()
+{
+    Super::BeginPlay();
+
+    // Bind overlap events
+    CollisionSphere->OnComponentBeginOverlap.AddDynamic(this, &ADetectBallCollision::OnOverlapBegin);
+    CollisionSphere->OnComponentEndOverlap.AddDynamic(this, &ADetectBallCollision::OnOverlapEnd);
+}
+
+// Called every frame
+void ADetectBallCollision::Tick(float DeltaTime)
+{
+    Super::Tick(DeltaTime);
+}
+
+void ADetectBallCollision::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+    APelota* Ball = Cast<APelota>(OtherActor);
+    if (Ball)
+    {
+        collision++;
+        FString Message = FString::Printf(TEXT("Collision detected! Count: %d"), collision);
+        GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, Message);
+    }
+}
+
+void ADetectBallCollision::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+    // Perform actions when the overlap ends, if needed
+}

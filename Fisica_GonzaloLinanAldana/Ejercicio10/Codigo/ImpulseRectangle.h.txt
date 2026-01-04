@@ -1,0 +1,41 @@
+#pragma once
+#include "CoreMinimal.h"
+#include "GameFramework/Actor.h"
+#include "Components/BoxComponent.h"
+#include "PhysicsEngine/PhysicsConstraintComponent.h"
+#include "Pelota.h"
+#include "ImpulseRectangle.generated.h"
+
+UCLASS()
+class PRACTICA1FISICAGLA_API AImpulseRectangle : public AActor
+{
+	GENERATED_BODY()
+	
+public:	
+	// Sets default values for this actor's properties
+	AImpulseRectangle();
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+    UFUNCTION()
+    void OnRectanguloOverlapBegin(UPrimitiveComponent* OverlappedComp,AActor* OtherActor,UPrimitiveComponent* OtherComp,int32 OtherBodyIndex,bool bFromSweep,const FHitResult& SweepResult);
+
+    UFUNCTION()
+    void OnRectanguloOverlapEnd(UPrimitiveComponent* OverlappedComp,AActor* OtherActor,UPrimitiveComponent* OtherComp,int32 OtherBodyIndex);
+public:	
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+private:
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Collision", meta = (AllowPrivateAccess = "true"))
+    UBoxComponent* CollisionBox;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Constraint", meta = (AllowPrivateAccess = "true"))
+    UPhysicsConstraintComponent* RotationConstraint;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Impulse", meta = (AllowPrivateAccess = "true"))
+    FVector ImpulseDirection;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Impulse", meta = (AllowPrivateAccess = "true"))
+    float ImpulseMagnitude;
+};

@@ -1,0 +1,31 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+#include "Particle.h"
+#include "CoreMinimal.h"
+#include "GameFramework/Actor.h"
+#include "EmisorParticulas.generated.h"
+
+UCLASS()
+class PRACTICA1FISICAGLA_API AEmisorParticulas : public AActor
+{
+	GENERATED_BODY()
+public:	
+	AEmisorParticulas();
+	UPROPERTY(BlueprintReadOnly,EditAnywhere)
+	TSubclassOf<AParticle> particle;
+	TArray<AParticle*> ptr_Particles;
+	float fRatioEmision;
+	FVector fvInitialVelocity;
+	FVector fvInitialAcceleration;
+	FVector fvSpawnLocation;
+	float ParticleLifetime;
+
+	virtual void Tick(float TimeStep) override;
+
+protected:
+	virtual void BeginPlay() override;
+
+private:
+
+};

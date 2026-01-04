@@ -1,0 +1,42 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "Particle.h"
+#include "RotatingParticle.generated.h"
+
+/**
+ * 
+ */
+UCLASS()
+class PRACTICA1FISICAGLA_API ARotatingParticle : public AParticle
+{
+	GENERATED_BODY()
+public:
+	ARotatingParticle();
+
+	virtual void Tick(float DeltaTime) override;
+
+	// Valores de rotación
+	FVector angle;
+	// Velocidad angular
+	FVector fvAngularVelocity;
+	// Aceleracion Angular
+	FVector fvAngularAcceleration;
+
+	float fRotationTiempoVida;
+
+	FVector GetAngle() const;
+	void SetAngle(const FVector& NewAngle);
+
+	FVector GetAngularVelocity() const;
+	void SetAngularVelocity(const FVector& NewAngularVelocity);
+
+	FVector GetAngularAcceleration() const;
+	void SetAngularAcceleration(const FVector& NewAngularAcceleration);
+
+
+protected:
+	virtual void BeginPlay() override;
+};

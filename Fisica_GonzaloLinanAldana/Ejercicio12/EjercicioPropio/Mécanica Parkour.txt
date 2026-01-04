@@ -1,0 +1,1 @@
+Yo cree un componente parkour para que el jugador pueda recorrer paredes simulando asi un WallRunning. Además de crear un jump-pad que propulsa el jugador en el aire.

@@ -1,0 +1,72 @@
+#include "RotatingParticle.h"
+
+ARotatingParticle::ARotatingParticle()
+{
+	PrimaryActorTick.bCanEverTick = true;
+
+	// Inicializar valores por defecto
+	angle = FVector(0,100,100);
+	fvAngularVelocity = FVector(0,100,100);
+	fvAngularAcceleration = FVector(0,50,0);
+	fRotationTiempoVida = 15.0f;
+}
+
+void ARotatingParticle::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
+void ARotatingParticle::Tick(float DeltaTime)
+{
+	// Actualizar la velocidad angular
+	fvAngularVelocity += fvAngularAcceleration * DeltaTime;
+
+	// Actualizar los ángulos de rotación
+	angle += fvAngularVelocity * DeltaTime;
+
+	// Aplicar la rotación a la partícula
+	SetActorRotation(FRotator(angle.X, angle.Y, angle.Z));
+	SetActorLocation(GetActorLocation() + GetVelocity() * DeltaTime);
+
+	if (fRotationTiempoVida <= 0.0f)
+	{
+		Destroy();
+	}
+	else
+	{
+		fRotationTiempoVida -= DeltaTime;
+	}
+
+}
+
+FVector ARotatingParticle::GetAngle() const
+{
+	return angle;
+}
+
+void ARotatingParticle::SetAngle(const FVector& NewAngle)
+{
+	angle = NewAngle;
+}
+
+FVector ARotatingParticle::GetAngularVelocity() const
+{
+	return fvAngularVelocity;
+}
+
+void ARotatingParticle::SetAngularVelocity(const FVector& NewAngularVelocity)
+{
+	fvAngularVelocity = NewAngularVelocity;
+}
+
+FVector ARotatingParticle::GetAngularAcceleration() const
+{
+	return fvAngularAcceleration;
+}
+
+void ARotatingParticle::SetAngularAcceleration(const FVector& NewAngularAcceleration)
+{
+	fvAngularAcceleration = NewAngularAcceleration;
+}
+
+

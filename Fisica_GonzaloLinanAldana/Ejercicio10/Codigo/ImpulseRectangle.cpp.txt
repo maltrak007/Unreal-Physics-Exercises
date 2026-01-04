@@ -1,0 +1,53 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+
+#include "ImpulseRectangle.h"
+
+// Sets default values
+AImpulseRectangle::AImpulseRectangle()
+{
+ 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	PrimaryActorTick.bCanEverTick = true;
+
+    CollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionBox"));
+    RootComponent = CollisionBox;
+    CollisionBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+    CollisionBox->SetCollisionObjectType(ECC_WorldDynamic);
+    CollisionBox->SetGenerateOverlapEvents(true);
+    CollisionBox->SetCollisionResponseToAllChannels(ECR_Overlap);
+    CollisionBox->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+
+    RotationConstraint = CreateDefaultSubobject<UPhysicsConstraintComponent>(TEXT("RotationConstraint"));
+    RotationConstraint->SetupAttachment(RootComponent);
+}
+
+// Called when the game starts or when spawned
+void AImpulseRectangle::BeginPlay()
+{
+	Super::BeginPlay();
+    CollisionBox->OnComponentBeginOverlap.AddDynamic(this, &AImpulseRectangle::OnRectanguloOverlapBegin);
+    CollisionBox->OnComponentEndOverlap.AddDynamic(this, &AImpulseRectangle::OnRectanguloOverlapEnd);
+}
+
+void AImpulseRectangle::OnRectanguloOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+    APelota* Pelota = Cast<APelota>(OtherActor);
+    if (Pelota)
+    {
+        FVector Impulse = ImpulseMagnitude * ImpulseDirection;
+        Pelota->ballMesh->AddForce(Impulse);
+    }
+}
+
+void AImpulseRectangle::OnRectanguloOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+    //No hago nada
+}
+
+// Called every frame
+void AImpulseRectangle::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+}
+
